@@ -1,0 +1,60 @@
+---
+import { Picture, getImage } from 'astro:assets';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import { articleJsonLd } from '@/lib/jsonld';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('blog', ({ data }) => !data.brouillon);
+  return articles.map((article) => ({ params: { id: article.id }, props: { article } }));
+}
+
+interface Props {
+  article: CollectionEntry<'blog'>;
+}
+const { article } = Astro.props;
+const d = article.data;
+const { Content } = await render(article);
+const fmt = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' });
+const og = d.image ? await getImage({ src: d.image, width: 1200, height: 630, format: 'jpeg' }) : undefined;
+const url = new URL(`/blog/${article.id}`, Astro.site).href;
+---
+
+<Base
+  titre={d.titre}
+  description={d.description}
+  type="article"
+  image={og?.src}
+  imageAlt={d.imageAlt}
+  jsonLd={articleJsonLd({ titre: d.titre, description: d.description, url, date: d.date, miseAJour: d.miseAJour, image: og ? new URL(og.src, Astro.site).href : undefined })}
+>
+  <article class="conteneur max-w-3xl pt-10 sm:pt-14">
+    <a href="/blog" class="lien text-sm">← Toutes les ressources</a>
+    <h1 class="mt-6 text-3xl leading-tight sm:text-5xl">{d.titre}</h1>
+    <p class="mt-4 text-sm text-encre-douce">
+      Publié le <time datetime={d.date.toISOString()}>{fmt.format(d.date)}</time>
+      {d.miseAJour && <>· mis à jour le <time datetime={d.miseAJour.toISOString()}>{fmt.format(d.miseAJour)}</time></>}
+    </p>
+    {
+      d.image && (
+        <Picture
+          src={d.image}
+          alt={d.imageAlt ?? ''}
+          widths={[600, 900, 1300]}
+          sizes="(min-width: 768px) 720px, 100vw"
+          formats={['avif', 'webp']}
+          loading="eager"
+          class="mt-8 aspect-[16/9] w-full rounded-[2rem] object-cover"
+        />
+      )
+    }
+    <div class="prose prose-stone prose-lg mt-10 max-w-none prose-headings:font-titre prose-headings:font-normal prose-a:text-sauge-fonce">
+      <Content />
+    </div>
+    <aside class="mt-14 rounded-doux bg-sauge-clair/60 p-6 sm:p-8">
+      <p class="font-titre text-xl">Besoin d’en parler ?</p>
+      <p class="mt-2 text-encre-douce">Cet article ne remplace pas une consultation. Si vous le souhaitez, nous pouvons en parler en séance.</p>
+      <a href="/contact" class="bouton mt-5">Prendre rendez-vous</a>
+    </aside>
+  </article>
+</Base>

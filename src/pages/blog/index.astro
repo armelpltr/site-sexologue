@@ -1,0 +1,48 @@
+---
+import { Picture } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+
+const articles = (await getCollection('blog', ({ data }) => !data.brouillon)).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const fmt = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'long' });
+---
+
+<Base titre="Ressources" description="Articles pédagogiques sur la sexualité, le désir et la vie de couple, pour s’informer en toute sérénité.">
+  <div class="conteneur pt-12 sm:pt-16">
+    <p class="surtitre">Blog</p>
+    <h1 class="mt-2 text-4xl sm:text-5xl">Ressources</h1>
+    <p class="mt-5 max-w-2xl text-lg text-encre-douce">
+      Des articles pour s’informer. Ils ne remplacent pas une consultation personnalisée.
+    </p>
+  </div>
+  <ul class="conteneur mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      articles.map((a, i) => (
+        <li>
+          <article class="group relative flex h-full flex-col">
+            {a.data.image && (
+              <Picture
+                src={a.data.image}
+                alt=""
+                widths={[400, 700]}
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                formats={['avif', 'webp']}
+                loading={i < 3 ? 'eager' : 'lazy'}
+                class="aspect-[16/9] w-full rounded-doux object-cover transition duration-500 group-hover:opacity-90"
+              />
+            )}
+            <time datetime={a.data.date.toISOString()} class="mt-4 text-sm text-encre-douce">
+              {fmt.format(a.data.date)}
+            </time>
+            <h2 class="mt-1 text-xl">
+              <a href={`/blog/${a.id}`} class="after:absolute after:inset-0 group-hover:text-sauge-fonce">
+                {a.data.titre}
+              </a>
+            </h2>
+            <p class="mt-2 text-[0.95rem] text-encre-douce">{a.data.description}</p>
+          </article>
+        </li>
+      ))
+    }
+  </ul>
+</Base>
