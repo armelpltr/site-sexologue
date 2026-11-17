@@ -1,6 +1,6 @@
 ---
-titre: Couple et communication
-resume: Difficultés à se parler, désaccords sur la sexualité, distance qui s'installe, crise ou envie de mieux se comprendre.
+titre: "Couple et communication"
+resume: "Difficultés à se parler, désaccords sur la sexualité, distance qui s'installe, crise ou envie de mieux se comprendre."
 icone: couple
 ordre: 1
 ---

@@ -1,6 +1,6 @@
 ---
-titre: Identité et orientation
-resume: Questionnements sur son identité de genre ou son orientation sexuelle, besoin d'un espace d'écoute bienveillant.
+titre: "Identité et orientation"
+resume: "Questionnements sur son identité de genre ou son orientation sexuelle, besoin d'un espace d'écoute bienveillant."
 icone: identite
 ordre: 4
 ---

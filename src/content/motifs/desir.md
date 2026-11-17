@@ -1,6 +1,6 @@
 ---
-titre: Désir et libido
-resume: Baisse ou absence de désir, désir jugé « trop fort », variations qui inquiètent ou pèsent sur la relation.
+titre: "Désir et libido"
+resume: "Baisse ou absence de désir, désir jugé « trop fort », variations qui inquiètent ou pèsent sur la relation."
 icone: desir
 ordre: 2
 ---

@@ -1,6 +1,6 @@
 ---
-titre: Troubles de la fonction sexuelle
-resume: Difficultés d'érection, d'éjaculation, d'excitation ou d'orgasme, qui s'installent ou reviennent.
+titre: "Troubles de la fonction sexuelle"
+resume: "Difficultés d'érection, d'éjaculation, d'excitation ou d'orgasme, qui s'installent ou reviennent."
 icone: fonction
 ordre: 5
 ---

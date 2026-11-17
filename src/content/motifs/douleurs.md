@@ -1,6 +1,6 @@
 ---
-titre: Douleurs lors des rapports
-resume: Douleurs pendant ou après les rapports, contractions involontaires, appréhension qui s'installe.
+titre: "Douleurs lors des rapports"
+resume: "Douleurs pendant ou après les rapports, contractions involontaires, appréhension qui s'installe."
 icone: douleur
 ordre: 3
 ---

@@ -1,6 +1,6 @@
 ---
-titre: Questionnements et étapes de vie
-resume: Première relation, grossesse, ménopause, maladie, séparation, vécu difficile : des moments où la sexualité se transforme.
+titre: "Questionnements et étapes de vie"
+resume: "Première relation, grossesse, ménopause, maladie, séparation, vécu difficile : des moments où la sexualité se transforme."
 icone: parcours
 ordre: 6
 ---
