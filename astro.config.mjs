@@ -7,7 +7,9 @@ import tailwindcss from '@tailwindcss/vite';
 const SITE_URL = 'https://www.exemple-cabinet-sexologie.fr';
 
 export default defineConfig({
-  site: SITE_URL,
+  // Surchargés par le workflow GitHub Pages (sous-dossier /<repo>/).
+  site: process.env.SITE_URL ?? SITE_URL,
+  base: process.env.BASE_PATH ?? '/',
   trailingSlash: 'ignore',
   integrations: [sitemap({ filter: (page) => !/\/(merci|404)\/?$/.test(page) })],
   vite: {
