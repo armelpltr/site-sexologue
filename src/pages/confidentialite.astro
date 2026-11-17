@@ -1,0 +1,76 @@
+---
+import Texte from '@/layouts/Texte.astro';
+import { site, adresseComplete } from '@/config/site';
+const l = site.legal;
+const prestataire =
+  site.formulaire.service === 'formspree'
+    ? 'Formspree, Inc. (États-Unis), dans le cadre des clauses contractuelles types de la Commission européenne'
+    : 'Netlify, Inc. (États-Unis), dans le cadre des clauses contractuelles types de la Commission européenne';
+const audience = site.audience.outil;
+---
+
+<Texte titre="Politique de confidentialité" surtitre="RGPD" description="Comment vos données personnelles sont protégées sur ce site.">
+  <p><em>Modèle à faire relire et compléter avant la mise en ligne. Les éléments entre crochets sont des placeholders.</em></p>
+
+  <h2>Notre engagement</h2>
+  <p>
+    La confidentialité est au cœur de la pratique du cabinet. Ce site a été conçu pour collecter le minimum de
+    données possible : <strong>aucun cookie publicitaire, aucun traceur tiers, aucune donnée de santé</strong> via le
+    formulaire.
+  </p>
+
+  <h2>Responsable du traitement</h2>
+  <p>{l.editeur}, {adresseComplete}. Contact : <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>.</p>
+
+  <h2>Données collectées via le formulaire</h2>
+  <p>
+    Nom, adresse e-mail, numéro de téléphone (facultatif) et message libre. Le formulaire invite expressément à ne
+    pas y décrire sa situation personnelle ou de santé. Si de telles informations y figuraient malgré tout, elles
+    seraient supprimées dès la prise de contact.
+  </p>
+  <p>
+    <strong>Finalité :</strong> vous recontacter pour répondre à votre demande ou organiser un rendez-vous.
+    <strong>Base légale :</strong> votre consentement (article 6.1.a du RGPD).
+  </p>
+
+  <h2>Destinataires</h2>
+  <p>
+    Seul·e {site.nom} a accès à vos messages. Ils transitent par {prestataire}. Le site est hébergé par {l.hebergeur}.
+  </p>
+
+  <h2>Prise de rendez-vous en ligne</h2>
+  <p>
+    La réservation en ligne s’effectue sur {site.contact.nomPlateformeRdv}, qui agit sous sa propre responsabilité et
+    dispose de sa propre politique de confidentialité. [Vérifier et compléter selon la plateforme retenue.]
+  </p>
+
+  <h2>Durée de conservation</h2>
+  <p>Les messages reçus via le formulaire sont conservés [12 mois] maximum, puis supprimés.</p>
+
+  <h2>Cookies et mesure d’audience</h2>
+  {
+    audience ? (
+      <p>
+        Une mesure d’audience anonyme est réalisée avec {audience === 'plausible' ? 'Plausible Analytics' : 'Umami'},
+        un outil sans cookies qui ne collecte aucune donnée personnelle et ne suit pas les visiteurs d’un site à
+        l’autre. Aucun consentement n’est donc requis.
+      </p>
+    ) : (
+      <p>Ce site ne dépose aucun cookie et n’utilise aucun outil de mesure d’audience ni aucun traceur.</p>
+    )
+  }
+  <p>
+    La carte d’accès est fournie par OpenStreetMap, qui ne dépose pas de cookie publicitaire. Voir la
+    <a href="https://osmfoundation.org/wiki/Privacy_Policy" rel="noopener">politique de confidentialité d’OpenStreetMap</a>.
+  </p>
+
+  <h2>Vos droits</h2>
+  <p>
+    Vous disposez d’un droit d’accès, de rectification, d’effacement, de limitation, d’opposition et de portabilité de
+    vos données, ainsi que du droit de retirer votre consentement à tout moment. Pour les exercer :
+    <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>. Vous pouvez également introduire une réclamation
+    auprès de la CNIL (<a href="https://www.cnil.fr" rel="noopener">cnil.fr</a>).
+  </p>
+
+  <p><small>Dernière mise à jour : {l.misAJour}.</small></p>
+</Texte>

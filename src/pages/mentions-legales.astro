@@ -1,0 +1,46 @@
+---
+import Texte from '@/layouts/Texte.astro';
+import { site, adresseComplete } from '@/config/site';
+const l = site.legal;
+---
+
+<Texte titre="Mentions légales" surtitre="Informations" description="Mentions légales du site.">
+  <p><em>Les éléments entre crochets sont à compléter avant la mise en ligne.</em></p>
+
+  <h2>Éditeur du site</h2>
+  <p>
+    {l.editeur}<br />
+    {l.statut}<br />
+    {adresseComplete}<br />
+    Téléphone : {site.contact.telephone}<br />
+    E-mail : <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+  </p>
+  <p>
+    SIRET : {l.siret}<br />
+    Identifiant professionnel : {l.identifiantPro}<br />
+    Ordre ou organisme : {l.ordre}<br />
+    Assurance responsabilité civile professionnelle : {l.assuranceRcPro}
+  </p>
+  <p>Directeur ou directrice de la publication : {l.directeurPublication}.</p>
+
+  <h2>Hébergement</h2>
+  <p>{l.hebergeur}</p>
+
+  <h2>Contenus</h2>
+  <p>
+    Les informations publiées sur ce site, notamment les articles de la rubrique « Ressources », ont une vocation
+    générale et pédagogique. Elles ne constituent ni un diagnostic ni un avis personnalisé et ne remplacent pas une
+    consultation. En cas d’urgence, appelez le 15 (SAMU) ou le 3114 (numéro national de prévention du suicide).
+  </p>
+
+  <h2>Propriété intellectuelle</h2>
+  <p>
+    Les textes et visuels de ce site sont protégés. Toute reproduction sans autorisation préalable est interdite.
+    Crédits photos : [à compléter].
+  </p>
+
+  <h2>Données personnelles</h2>
+  <p>Voir la <a href="/confidentialite">politique de confidentialité</a>.</p>
+
+  <p><small>Dernière mise à jour : {l.misAJour}.</small></p>
+</Texte>
