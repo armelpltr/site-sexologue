@@ -1,0 +1,97 @@
+---
+import Base from '@/layouts/Base.astro';
+import { site, adresseComplete, telLien } from '@/config/site';
+
+const formspree = site.formulaire.service === 'formspree';
+const action = formspree ? `https://formspree.io/f/${site.formulaire.formspreeId}` : '/merci';
+---
+
+<Base titre="Contact & rendez-vous" description={`Prendre rendez-vous avec ${site.nom}, ${site.titreCourt.toLowerCase()} à ${site.adresse.ville} : réservation en ligne, téléphone ou message.`}>
+  <div class="conteneur pt-12 sm:pt-16">
+    <p class="surtitre">Contact</p>
+    <h1 class="mt-2 text-4xl sm:text-5xl">Prendre rendez-vous</h1>
+  </div>
+
+  <div class="conteneur mt-10 grid gap-10 lg:grid-cols-[2fr_3fr] lg:gap-16">
+    <section aria-labelledby="titre-rdv" class="space-y-6">
+      <div class="rounded-[2rem] bg-sauge-fonce p-7 text-white sm:p-8">
+        <h2 id="titre-rdv" class="text-2xl text-white">Réserver en ligne</h2>
+        <p class="mt-2 text-white/90">Choisissez directement un créneau disponible, au cabinet ou en visio.</p>
+        <a
+          href={site.contact.lienRdv}
+          target="_blank"
+          rel="noopener"
+          class="mt-6 inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-6 py-3 font-medium text-sauge-fonce transition hover:bg-sable"
+        >
+          Réserver sur {site.contact.nomPlateformeRdv}
+          <span class="sr-only">(nouvel onglet)</span>
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" /></svg>
+        </a>
+      </div>
+      <div class="carte">
+        <h2 class="text-xl">Par téléphone</h2>
+        <p class="mt-2"><a class="lien text-lg" href={telLien}>{site.contact.telephone}</a></p>
+        <p class="mt-1 text-sm text-encre-douce">[Si je suis en séance, laissez un message : je vous rappelle dans la journée.]</p>
+        <h2 class="mt-6 text-xl">Adresse</h2>
+        <p class="mt-2">{adresseComplete}</p>
+        <p class="text-sm text-encre-douce">{site.adresse.complement}</p>
+        <p class="mt-2"><a class="lien text-sm" href="/tarifs">Plan d’accès et horaires</a></p>
+      </div>
+    </section>
+
+    <section aria-labelledby="titre-message">
+      <h2 id="titre-message" class="text-2xl">Laisser un message</h2>
+      <p class="mt-2 text-encre-douce">Pour une question pratique ou être rappelé·e.</p>
+
+      <div class="mt-5 flex gap-3 rounded-2xl bg-terracotta-clair p-4 text-[0.95rem]" role="note">
+        <svg class="mt-0.5 h-5 w-5 shrink-0 text-terracotta-texte" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16h.01"></path>
+        </svg>
+        <p><strong class="font-medium">Ne détaillez pas votre situation ici.</strong> Nous en parlerons de vive voix, en toute confidentialité.</p>
+      </div>
+
+      <form
+        name="contact"
+        method="POST"
+        action={action}
+        data-netlify={formspree ? undefined : 'true'}
+        netlify-honeypot={formspree ? undefined : 'site-web'}
+        class="mt-6 space-y-5"
+      >
+        {!formspree && <input type="hidden" name="form-name" value="contact" />}
+        <p class="hidden">
+          <label>Ne pas remplir : <input name="site-web" tabindex="-1" autocomplete="off" /></label>
+        </p>
+        <div>
+          <label for="nom" class="font-medium">Nom <span aria-hidden="true">*</span></label>
+          <input class="champ" id="nom" name="nom" autocomplete="name" required aria-required="true" />
+        </div>
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label for="email" class="font-medium">E-mail <span aria-hidden="true">*</span></label>
+            <input class="champ" id="email" type="email" name="email" autocomplete="email" required aria-required="true" />
+          </div>
+          <div>
+            <label for="telephone" class="font-medium">Téléphone</label>
+            <input class="champ" id="telephone" type="tel" name="telephone" autocomplete="tel" />
+          </div>
+        </div>
+        <div>
+          <label for="message" class="font-medium">Message <span aria-hidden="true">*</span></label>
+          <p id="aide-message" class="text-sm text-encre-douce">Par exemple : vos disponibilités, une question sur les tarifs ou la visio.</p>
+          <textarea class="champ min-h-36 resize-y" id="message" name="message" rows="5" required aria-required="true" aria-describedby="aide-message"></textarea>
+        </div>
+        <div class="flex items-start gap-3 text-sm text-encre-douce">
+          <input type="checkbox" id="consentement" name="consentement" required class="mt-1 h-5 w-5 shrink-0 accent-[var(--color-sauge-fonce)]" />
+          <label for="consentement">
+            J’accepte que ces informations soient utilisées uniquement pour me recontacter, conformément à la
+            <a class="lien" href="/confidentialite">politique de confidentialité</a>. <span aria-hidden="true">*</span>
+          </label>
+        </div>
+        {formspree && <input type="hidden" name="_next" value={new URL('/merci', Astro.site).href} />}
+        <p class="text-sm text-encre-douce"><span aria-hidden="true">*</span> Champs obligatoires</p>
+        <button type="submit" class="bouton">Envoyer le message</button>
+      </form>
+    </section>
+  </div>
+</Base>
