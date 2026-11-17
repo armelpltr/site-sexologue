@@ -1,0 +1,93 @@
+---
+import Base from '@/layouts/Base.astro';
+import { site } from '@/config/site';
+import { faqJsonLd } from '@/lib/jsonld';
+
+// Réponses à faire valider par le ou la praticien·ne (notamment selon son titre).
+const questions = [
+  {
+    q: 'Qu’est-ce qu’un ou une sexologue ?',
+    r: '[À adapter selon le titre.] Un·e professionnel·le formé·e à l’accompagnement des questions et difficultés liées à la sexualité et à la vie intime, seul·e ou en couple. La consultation repose sur l’échange verbal.',
+  },
+  {
+    q: 'Y a-t-il un examen physique ?',
+    r: 'Non. La consultation est un échange par la parole. Si un examen médical semble utile, vous pouvez être orienté·e vers un médecin ou un·e autre professionnel·le de santé.',
+  },
+  {
+    q: 'Dois-je venir seul·e ou en couple ?',
+    r: 'Comme vous le souhaitez. Il est possible de venir seul·e, à deux, ou d’alterner. Une personne en couple peut tout à fait consulter seule.',
+  },
+  {
+    q: 'Ce que je dis reste-t-il confidentiel ?',
+    r: 'Oui. Tout ce qui est dit en séance est couvert par le secret professionnel. Rien n’est transmis à un tiers, y compris à votre partenaire, sans votre accord.',
+  },
+  {
+    q: 'Combien de séances faut-il prévoir ?',
+    r: 'Cela dépend de chaque situation. Le nombre et le rythme des séances se décident ensemble, et vous restez libre d’arrêter à tout moment.',
+  },
+  {
+    q: 'Les consultations sont-elles remboursées ?',
+    r: site.remboursement,
+  },
+  {
+    q: 'Faut-il une ordonnance ?',
+    r: '[À valider.] Non, vous pouvez prendre rendez-vous directement, sans prescription médicale.',
+  },
+  {
+    q: 'Les consultations en visio sont-elles possibles ?',
+    r: '[À valider.] Oui, sur une plateforme sécurisée. Prévoyez un endroit calme où vous ne serez pas dérangé·e.',
+  },
+  {
+    q: 'À partir de quel âge peut-on consulter ?',
+    r: '[À préciser par le ou la praticien·ne : adultes uniquement, ou accueil des mineurs selon quelles conditions.]',
+  },
+];
+---
+
+<Base titre="Questions fréquentes" description="Examen, confidentialité, remboursement, visio, nombre de séances : les réponses aux questions les plus fréquentes sur la consultation en sexologie." jsonLd={faqJsonLd(questions)}>
+  <div class="conteneur max-w-3xl pt-12 sm:pt-16">
+    <p class="surtitre">FAQ</p>
+    <h1 class="mt-2 text-4xl sm:text-5xl">Questions fréquentes</h1>
+
+    <div class="mt-10 space-y-3">
+      {
+        questions.map(({ q, r }) => (
+          <details class="faq group rounded-doux bg-white/70 ring-1 ring-trait open:ring-sauge/50">
+            <summary class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 rounded-doux px-5 py-4 font-medium hover:bg-sable/60 sm:px-6">
+              <span>{q}</span>
+              <svg class="h-5 w-5 shrink-0 text-sauge-fonce transition-transform duration-300 group-open:rotate-45" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true">
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+            </summary>
+            <div class="px-5 pb-5 text-encre-douce sm:px-6">
+              <p>{r}</p>
+            </div>
+          </details>
+        ))
+      }
+    </div>
+
+    <p class="mt-12 text-encre-douce">
+      Vous ne trouvez pas votre réponse ? <a class="lien" href="/contact">Posez votre question</a>, sans détailler votre situation.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .faq summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq::details-content {
+    transition: content-visibility 0.3s allow-discrete, height 0.3s ease;
+    height: 0;
+    overflow: clip;
+  }
+  .faq[open]::details-content {
+    height: auto;
+  }
+  @supports (interpolate-size: allow-keywords) {
+    :root {
+      interpolate-size: allow-keywords;
+    }
+  }
+</style>
