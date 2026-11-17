@@ -1,0 +1,102 @@
+---
+import { Picture } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import Icone from '@/components/Icone.astro';
+import Temoignages from '@/components/Temoignages.astro';
+import { site } from '@/config/site';
+import { cabinetJsonLd } from '@/lib/jsonld';
+import cabinet from '@/assets/cabinet.jpg';
+
+const motifs = (await getCollection('motifs')).sort((a, b) => a.data.ordre - b.data.ordre);
+
+const valeurs = [
+  { icone: 'cadenas', titre: 'Confidentialité', texte: 'Ce qui se dit en séance reste entre nous.' },
+  { icone: 'desir', titre: 'Non-jugement', texte: 'Toutes les questions et tous les vécus sont accueillis.' },
+  { icone: 'visio', titre: 'Cabinet ou visio', texte: 'Choisissez la formule qui vous met le plus à l’aise.' },
+] as const;
+---
+
+<Base jsonLd={cabinetJsonLd(Astro.site)}>
+  <section class="conteneur grid items-center gap-10 pt-10 pb-6 sm:pt-16 lg:grid-cols-2 lg:gap-16">
+    <div class="apparition">
+      <p class="surtitre">{site.titreCourt} à {site.adresse.ville}</p>
+      <h1 class="mt-3 text-4xl leading-tight sm:text-5xl">{site.accroche}</h1>
+      <p class="mt-6 max-w-xl text-lg text-encre-douce">
+        Seul·e ou en couple, en cabinet ou en visio : un temps pour mettre des mots sur ce qui vous préoccupe, à
+        votre rythme et en toute confidentialité.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/contact" class="bouton">Prendre rendez-vous</a>
+        <a href="/seance" class="bouton-secondaire">Déroulement d’une séance</a>
+      </div>
+    </div>
+    <Picture
+      src={cabinet}
+      alt="Le cabinet : un canapé vert sauge, une plante et une lampe dans une pièce lumineuse (visuel provisoire)"
+      widths={[480, 800, 1200]}
+      sizes="(min-width: 1024px) 50vw, 100vw"
+      formats={['avif', 'webp']}
+      loading="eager"
+      fetchpriority="high"
+      class="aspect-[3/2] w-full rounded-[2rem] object-cover"
+    />
+  </section>
+
+  <section class="conteneur mt-10 grid gap-4 sm:grid-cols-3" aria-label="Engagements du cabinet">
+    {
+      valeurs.map((v) => (
+        <div class="flex items-start gap-4 rounded-doux bg-sauge-clair/60 p-5">
+          <Icone nom={v.icone} class="mt-0.5 h-6 w-6 shrink-0 text-sauge-fonce" />
+          <div>
+            <h2 class="font-sans text-base font-medium">{v.titre}</h2>
+            <p class="text-sm text-encre-douce">{v.texte}</p>
+          </div>
+        </div>
+      ))
+    }
+  </section>
+
+  <section class="conteneur mt-24" aria-labelledby="titre-motifs">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="surtitre">Pour quoi consulter ?</p>
+        <h2 id="titre-motifs" class="mt-2 text-3xl sm:text-4xl">Motifs de consultation</h2>
+      </div>
+      <a href="/motifs" class="lien">Tous les motifs</a>
+    </div>
+    <ul class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        motifs.map((m) => (
+          <li>
+            <a href={`/motifs/${m.id}`} class="carte group flex h-full flex-col hover:-translate-y-1 hover:shadow-md hover:ring-sauge/40">
+              <span class="grid h-12 w-12 place-items-center rounded-full bg-terracotta-clair text-terracotta-texte">
+                <Icone nom={m.data.icone} />
+              </span>
+              <h3 class="mt-5 text-xl">{m.data.titre}</h3>
+              <p class="mt-2 flex-1 text-[0.95rem] text-encre-douce">{m.data.resume}</p>
+              <span class="mt-4 text-sm font-medium text-sauge-fonce" aria-hidden="true">
+                En savoir plus <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <Temoignages />
+
+  <section class="conteneur mt-24">
+    <div class="rounded-[2rem] bg-sauge-fonce px-6 py-12 text-center text-white sm:px-12">
+      <h2 class="text-3xl text-white">Faire le premier pas</h2>
+      <p class="mx-auto mt-4 max-w-xl text-white/90">
+        Vous pouvez réserver directement en ligne, appeler le cabinet ou laisser un message. Inutile de détailler
+        votre situation : nous en parlerons ensemble.
+      </p>
+      <a href="/contact" class="mt-8 inline-flex min-h-12 items-center rounded-full bg-white px-7 py-3 font-medium text-sauge-fonce transition hover:bg-sable">
+        Prendre rendez-vous
+      </a>
+    </div>
+  </section>
+</Base>

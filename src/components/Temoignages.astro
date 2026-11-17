@@ -1,0 +1,28 @@
+---
+/**
+ * Section témoignages : DÉSACTIVÉE PAR DÉFAUT.
+ * Ne l'activer (site.temoignages.actif = true) qu'avec des avis réels,
+ * recueillis avec le consentement écrit des personnes, anonymisés, et
+ * conformes aux règles déontologiques applicables au titre du praticien.
+ */
+import { site } from '@/config/site';
+const { actif, liste } = site.temoignages;
+---
+
+{
+  actif && liste.length > 0 && (
+    <section class="conteneur mt-24" aria-labelledby="titre-temoignages">
+      <h2 id="titre-temoignages" class="text-3xl">
+        Ils et elles témoignent
+      </h2>
+      <div class="mt-8 grid gap-6 md:grid-cols-2">
+        {liste.map((t) => (
+          <figure class="carte">
+            <blockquote class="font-titre text-lg italic">« {t.texte} »</blockquote>
+            <figcaption class="mt-4 text-sm text-encre-douce">{t.auteur}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+  )
+}

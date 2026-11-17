@@ -1,0 +1,83 @@
+---
+import { Picture } from 'astro:assets';
+import Base from '@/layouts/Base.astro';
+import { site } from '@/config/site';
+import portrait from '@/assets/praticien.jpg';
+
+const formations = [
+  ['[Année]', '[Diplôme ou formation : ex. DIU de sexologie, université X]'],
+  ['[Année]', '[Diplôme initial : ex. master de psychologie clinique, diplôme d’État…]'],
+  ['[Année]', '[Formation complémentaire : thérapie de couple, approche corporelle…]'],
+];
+const valeurs = [
+  ['Non-jugement', 'Chaque personne, chaque couple et chaque sexualité est accueilli·e tel·le qu’il ou elle est, quelles que soient l’orientation, l’identité, l’âge ou la situation.'],
+  ['Confidentialité', 'Le secret professionnel s’applique à tout ce qui est dit en séance. Aucune information n’est transmise sans votre accord.'],
+  ['Respect du rythme', 'Vous choisissez ce que vous souhaitez aborder, et quand. Aucune question n’est obligatoire.'],
+  ['Travail en réseau', 'Si besoin, une orientation vers un médecin, un·e kinésithérapeute ou un·e autre professionnel·le peut vous être proposée.'],
+];
+---
+
+<Base titre="Le cabinet" description={`Parcours, formations et approche de ${site.nom}, ${site.titreCourt.toLowerCase()} à ${site.adresse.ville}.`}>
+  <section class="conteneur grid gap-10 pt-12 sm:pt-16 md:grid-cols-[2fr_3fr] md:gap-16">
+    <Picture
+      src={portrait}
+      alt={`Portrait de ${site.nom} (photo à fournir)`}
+      widths={[400, 700, 1000]}
+      sizes="(min-width: 768px) 40vw, 100vw"
+      formats={['avif', 'webp']}
+      loading="eager"
+      class="aspect-[4/5] w-full rounded-[2rem] object-cover"
+    />
+    <div class="md:pt-6">
+      <p class="surtitre">Le praticien · la praticienne</p>
+      <h1 class="mt-2 text-4xl sm:text-5xl">{site.nom}</h1>
+      <p class="mt-2 text-encre-douce">{site.titre}</p>
+      <div class="prose prose-stone mt-8 max-w-none">
+        <p>
+          [Présentation à la première personne : parcours, ce qui a amené vers la sexologie, publics accueillis.
+          Trois ou quatre phrases suffisent. Ton sobre, sans promesse de résultat.]
+        </p>
+        <p>
+          [Approche : par exemple, une approche intégrative qui tient compte du corps, des émotions, de la relation et
+          de l’histoire de chacun·e. Préciser les méthodes utilisées si pertinent.]
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="conteneur mt-20 grid gap-12 md:grid-cols-2">
+    <div>
+      <h2 class="text-3xl">Formations</h2>
+      <ol class="mt-6 space-y-4">
+        {
+          formations.map(([annee, texte]) => (
+            <li class="grid grid-cols-[4.5rem_1fr] gap-4 border-b border-trait pb-4">
+              <span class="text-sm text-encre-douce">{annee}</span>
+              <span>{texte}</span>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="mt-6 text-sm text-encre-douce">
+        [Appartenance à une association ou société savante, supervision, formation continue : à compléter.]
+      </p>
+    </div>
+    <div>
+      <h2 class="text-3xl">Valeurs</h2>
+      <dl class="mt-6 space-y-5">
+        {
+          valeurs.map(([titre, texte]) => (
+            <div class="carte p-5 sm:p-6">
+              <dt class="font-medium">{titre}</dt>
+              <dd class="mt-1 text-[0.95rem] text-encre-douce">{texte}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section class="conteneur mt-20 text-center">
+    <a href="/contact" class="bouton">Prendre rendez-vous</a>
+  </section>
+</Base>
