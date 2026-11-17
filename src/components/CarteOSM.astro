@@ -1,0 +1,28 @@
+---
+/**
+ * Carte OpenStreetMap intégrée (pas de Google Maps : pas de cookies
+ * publicitaires, pas de bandeau de consentement nécessaire).
+ */
+interface Props {
+  latitude: number;
+  longitude: number;
+  titre: string;
+  zoom?: number;
+}
+const { latitude, longitude, titre, zoom = 0.006 } = Astro.props;
+const bbox = [longitude - zoom * 1.6, latitude - zoom, longitude + zoom * 1.6, latitude + zoom].map((n) => n.toFixed(5)).join(',');
+const src = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${latitude}%2C${longitude}`;
+const lien = `https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=17/${latitude}/${longitude}`;
+---
+
+<figure>
+  <iframe
+    src={src}
+    title={titre}
+    loading="lazy"
+    referrerpolicy="no-referrer"
+    class="aspect-[4/3] w-full rounded-doux border-0 bg-sable sm:aspect-[16/10]"></iframe>
+  <figcaption class="mt-2 text-sm text-encre-douce">
+    <a class="lien" href={lien} target="_blank" rel="noopener">Voir sur OpenStreetMap (nouvel onglet)</a>
+  </figcaption>
+</figure>

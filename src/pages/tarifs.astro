@@ -1,0 +1,84 @@
+---
+import Base from '@/layouts/Base.astro';
+import CarteOSM from '@/components/CarteOSM.astro';
+import { site, adresseComplete, telLien } from '@/config/site';
+import { cabinetJsonLd } from '@/lib/jsonld';
+---
+
+<Base
+  titre="Tarifs & infos pratiques"
+  description={`Tarifs des consultations, remboursement, adresse et accès au cabinet de ${site.nom} à ${site.adresse.ville}.`}
+  jsonLd={cabinetJsonLd(Astro.site)}
+>
+  <div class="conteneur pt-12 sm:pt-16">
+    <p class="surtitre">Infos pratiques</p>
+    <h1 class="mt-2 text-4xl sm:text-5xl">Tarifs & accès</h1>
+  </div>
+
+  <div class="conteneur mt-10 grid gap-10 lg:grid-cols-2">
+    <section aria-labelledby="titre-tarifs">
+      <h2 id="titre-tarifs" class="text-2xl">Tarifs</h2>
+      <table class="mt-5 w-full overflow-hidden rounded-doux bg-white/70 text-left ring-1 ring-trait">
+        <caption class="sr-only">Tarifs des consultations</caption>
+        <thead class="bg-sable text-sm text-encre-douce">
+          <tr>
+            <th scope="col" class="px-5 py-3 font-medium">Consultation</th>
+            <th scope="col" class="px-5 py-3 font-medium">Durée</th>
+            <th scope="col" class="px-5 py-3 text-right font-medium">Tarif</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-trait">
+          {
+            site.tarifs.map((t) => (
+              <tr>
+                <th scope="row" class="px-5 py-4 font-normal">{t.prestation}</th>
+                <td class="px-5 py-4 text-encre-douce">{t.duree}</td>
+                <td class="px-5 py-4 text-right font-medium">{t.prix}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+      <p class="mt-4 text-sm text-encre-douce">Moyens de paiement : {site.moyensPaiement}.</p>
+
+      <h3 class="mt-10 text-xl">Remboursement</h3>
+      <p class="mt-2 text-encre-douce">{site.remboursement}</p>
+
+      <h3 class="mt-10 text-xl">Annulation</h3>
+      <p class="mt-2 text-encre-douce">
+        [Merci de prévenir au moins 48 h à l’avance en cas d’empêchement. Politique d’annulation à préciser.]
+      </p>
+    </section>
+
+    <section aria-labelledby="titre-acces">
+      <h2 id="titre-acces" class="text-2xl">Adresse & accès</h2>
+      <address class="mt-5 not-italic">
+        <p class="font-medium">{site.nom}</p>
+        <p>{adresseComplete}</p>
+        <p class="text-encre-douce">{site.adresse.complement}</p>
+        <p class="mt-2"><a class="lien" href={telLien}>{site.contact.telephone}</a></p>
+      </address>
+      <ul class="mt-5 space-y-1 text-[0.95rem] text-encre-douce">
+        {site.adresse.acces.map((a) => <li>• {a}</li>)}
+      </ul>
+      <h3 class="mt-8 text-xl">Horaires</h3>
+      <dl class="mt-2 text-[0.95rem]">
+        {
+          site.horaires.map((h) => (
+            <div class="flex justify-between border-b border-trait py-2">
+              <dt>{h.jours}</dt>
+              <dd class="text-encre-douce">{h.heures}</dd>
+            </div>
+          ))
+        }
+      </dl>
+      <div class="mt-8">
+        <CarteOSM latitude={site.adresse.latitude} longitude={site.adresse.longitude} titre={`Plan d’accès au cabinet, ${adresseComplete}`} />
+      </div>
+    </section>
+  </div>
+
+  <div class="conteneur mt-16 text-center">
+    <a href="/contact" class="bouton">Prendre rendez-vous</a>
+  </div>
+</Base>
