@@ -1,0 +1,11 @@
+---
+/**
+ * Mesure d'audience optionnelle et sans cookies (Plausible ou Umami).
+ * Désactivée par défaut : rien n'est chargé tant que site.audience.outil vaut null.
+ */
+import { site } from '@/config/site';
+const a = site.audience;
+---
+
+{a.outil === 'plausible' && a.plausibleDomaine && <script is:inline defer data-domain={a.plausibleDomaine} src={a.plausibleScript} />}
+{a.outil === 'umami' && a.umamiScript && a.umamiWebsiteId && <script is:inline defer data-website-id={a.umamiWebsiteId} src={a.umamiScript} />}

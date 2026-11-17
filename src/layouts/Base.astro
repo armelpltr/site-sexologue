@@ -1,0 +1,66 @@
+---
+import '@/styles/global.css';
+import Entete from '@/components/Entete.astro';
+import Pied from '@/components/Pied.astro';
+import Audience from '@/components/Audience.astro';
+import { site } from '@/config/site';
+
+interface Props {
+  titre?: string;
+  description?: string;
+  /** Image Open Graph (chemin ou URL). Par défaut : visuel du cabinet. */
+  image?: string;
+  imageAlt?: string;
+  type?: 'website' | 'article';
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const { titre, description = site.description, image = '/og-cabinet.jpg', imageAlt, type = 'website', jsonLd } = Astro.props;
+
+const suffixe = `${site.nom}, ${site.titreCourt.toLowerCase()} à ${site.adresse.ville}`;
+const titreComplet = titre ? `${titre} · ${suffixe}` : suffixe;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const imageOg = new URL(image, Astro.site).href;
+const blocs = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titreComplet}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#faf7f2" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content={`${site.nom}, ${site.titreCourt.toLowerCase()}`} />
+    <meta property="og:title" content={titreComplet} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageOg} />
+    {imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {blocs.map((b) => <script is:inline type="application/ld+json" set:html={JSON.stringify(b)} />)}
+    <Audience />
+  </head>
+  <body class="flex min-h-dvh flex-col">
+    <a
+      href="#contenu"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-full focus:bg-white focus:px-5 focus:py-3"
+    >
+      Aller au contenu
+    </a>
+    <Entete />
+    <main id="contenu" class="flex-1">
+      <slot />
+    </main>
+    <Pied />
+  </body>
+</html>

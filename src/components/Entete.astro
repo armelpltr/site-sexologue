@@ -1,0 +1,86 @@
+---
+import { site, navigation } from '@/config/site';
+
+const chemin = Astro.url.pathname.replace(/\/$/, '') || '/';
+const actif = (href: string) => chemin === href || chemin.startsWith(href + '/');
+---
+
+<header class="sticky top-0 z-40 border-b border-trait/80 bg-fond/90 backdrop-blur-md">
+  <div class="conteneur flex h-16 items-center justify-between gap-4 sm:h-20">
+    <a href="/" class="flex flex-col leading-tight">
+      <span class="font-titre text-lg sm:text-xl">{site.nom}</span>
+      <span class="text-xs text-encre-douce">{site.titreCourt} · {site.adresse.ville}</span>
+    </a>
+
+    <nav aria-label="Navigation principale" class="hidden lg:block">
+      <ul class="flex items-center gap-6 text-[0.95rem]">
+        {
+          navigation.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={actif(item.href) ? 'page' : undefined}
+                class:list={[
+                  'rounded-full py-2 transition-colors hover:text-sauge-fonce',
+                  actif(item.href) ? 'font-medium text-sauge-fonce' : 'text-encre-douce',
+                ]}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a href="/contact" class="bouton hidden min-h-11 px-5 py-2 text-sm sm:inline-flex">Prendre rendez-vous</a>
+      <details class="menu-mobile relative lg:hidden">
+        <summary class="flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded-full hover:bg-sable" aria-label="Menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16"></path>
+          </svg>
+        </summary>
+        <nav aria-label="Navigation mobile" class="absolute top-13 right-0 w-64 rounded-2xl bg-white p-2 shadow-lg ring-1 ring-trait">
+          <ul>
+            {
+              navigation.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    aria-current={actif(item.href) ? 'page' : undefined}
+                    class="block rounded-xl px-4 py-3 hover:bg-sable aria-[current=page]:font-medium aria-[current=page]:text-sauge-fonce"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+            <li class="mt-1 border-t border-trait pt-1">
+              <a href="/contact" class="block rounded-xl px-4 py-3 font-medium text-sauge-fonce hover:bg-sable">Prendre rendez-vous</a>
+            </li>
+          </ul>
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+
+<style>
+  .menu-mobile summary::-webkit-details-marker {
+    display: none;
+  }
+</style>
+
+<script>
+  const menu = document.querySelector<HTMLDetailsElement>('.menu-mobile');
+  menu?.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu.open) {
+      menu.open = false;
+      menu.querySelector('summary')?.focus();
+    }
+  });
+  document.addEventListener('click', (e) => {
+    if (menu?.open && !menu.contains(e.target as Node)) menu.open = false;
+  });
+</script>
