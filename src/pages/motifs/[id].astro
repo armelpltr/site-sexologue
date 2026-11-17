@@ -1,0 +1,59 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import Icone from '@/components/Icone.astro';
+
+export async function getStaticPaths() {
+  const motifs = (await getCollection('motifs')).sort((a, b) => a.data.ordre - b.data.ordre);
+  return motifs.map((motif) => ({
+    params: { id: motif.id },
+    props: { motif, autres: motifs.filter((m) => m.id !== motif.id) },
+  }));
+}
+
+interface Props {
+  motif: CollectionEntry<'motifs'>;
+  autres: CollectionEntry<'motifs'>[];
+}
+const { motif, autres } = Astro.props;
+const { Content } = await render(motif);
+---
+
+<Base titre={motif.data.titre} description={motif.data.resume}>
+  <div class="conteneur grid gap-12 pt-10 sm:pt-14 lg:grid-cols-[2fr_1fr]">
+    <article>
+      <nav aria-label="Fil d’Ariane" class="text-sm text-encre-douce">
+        <a class="lien" href="/motifs">Motifs de consultation</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">{motif.data.titre}</span>
+      </nav>
+      <span class="mt-8 grid h-14 w-14 place-items-center rounded-full bg-terracotta-clair text-terracotta-texte">
+        <Icone nom={motif.data.icone} class="h-8 w-8" />
+      </span>
+      <h1 class="mt-5 text-4xl sm:text-5xl">{motif.data.titre}</h1>
+      <p class="mt-4 text-lg text-encre-douce">{motif.data.resume}</p>
+      <div class="prose prose-stone mt-8 max-w-none prose-headings:font-titre prose-headings:font-normal">
+        <Content />
+      </div>
+      <div class="mt-10 flex flex-wrap gap-3">
+        <a href="/contact" class="bouton">Prendre rendez-vous</a>
+        <a href="/seance" class="bouton-secondaire">Déroulement d’une séance</a>
+      </div>
+    </article>
+
+    <aside aria-labelledby="titre-autres" class="lg:pt-24">
+      <h2 id="titre-autres" class="font-sans text-sm font-medium tracking-wide text-encre-douce uppercase">Autres motifs</h2>
+      <ul class="mt-4 space-y-2">
+        {
+          autres.map((m) => (
+            <li>
+              <a href={`/motifs/${m.id}`} class="flex items-center gap-3 rounded-xl p-3 transition-colors hover:bg-sable">
+                <Icone nom={m.data.icone} class="h-5 w-5 text-terracotta-texte" />
+                <span>{m.data.titre}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </aside>
+  </div>
+</Base>

@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import Icone from '@/components/Icone.astro';
+
+const motifs = (await getCollection('motifs')).sort((a, b) => a.data.ordre - b.data.ordre);
+---
+
+<Base titre="Motifs de consultation" description="Couple, désir, douleurs, identité et orientation, troubles sexuels, étapes de vie : les principaux motifs de consultation en sexologie.">
+  <div class="conteneur pt-12 sm:pt-16">
+    <p class="surtitre">Pour quoi consulter ?</p>
+    <h1 class="mt-2 text-4xl sm:text-5xl">Motifs de consultation</h1>
+    <p class="mt-5 max-w-2xl text-lg text-encre-douce">
+      Il n’est pas nécessaire d’avoir une difficulté précise pour consulter. Voici les situations les plus fréquentes ;
+      si la vôtre n’y figure pas, vous êtes tout autant le ou la bienvenu·e.
+    </p>
+  </div>
+  <ul class="conteneur mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      motifs.map((m) => (
+        <li>
+          <a href={`/motifs/${m.id}`} class="carte group flex h-full flex-col hover:-translate-y-1 hover:shadow-md hover:ring-sauge/40">
+            <span class="grid h-12 w-12 place-items-center rounded-full bg-terracotta-clair text-terracotta-texte">
+              <Icone nom={m.data.icone} />
+            </span>
+            <h2 class="mt-5 text-xl">{m.data.titre}</h2>
+            <p class="mt-2 flex-1 text-[0.95rem] text-encre-douce">{m.data.resume}</p>
+            <span class="mt-4 text-sm font-medium text-sauge-fonce" aria-hidden="true">
+              En savoir plus <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Base>
